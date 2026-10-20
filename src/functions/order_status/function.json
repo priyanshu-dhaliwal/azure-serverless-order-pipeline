@@ -1,0 +1,14 @@
+{
+  "scriptFile": "__init__.py",
+  "bindings": [
+    {
+      "name": "req",
+      "type": "httpTrigger",
+      "direction": "in",
+      "authLevel": "function",
+      "methods": ["get"],
+      "route": "orders/{id}"
+    },
+    { "name": "$return", "type": "http", "direction": "out" }
+  ]
+}

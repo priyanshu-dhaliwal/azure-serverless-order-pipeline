@@ -1,0 +1,8 @@
+azure-functions>=1.19.0
+azure-functions-durable>=1.2.9
+azure-cosmos>=4.8.0
+azure-servicebus>=7.12.0
+azure-identity>=1.19.0
+azure-monitor-opentelemetry>=1.6.0
+opentelemetry-api>=1.27.0
+pydantic>=2.9.0

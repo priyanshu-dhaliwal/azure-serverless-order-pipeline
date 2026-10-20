@@ -1,0 +1,18 @@
+{
+  "scriptFile": "__init__.py",
+  "bindings": [
+    {
+      "name": "documents",
+      "type": "cosmosDBTrigger",
+      "direction": "in",
+      "connection": "COSMOS_CONNECTION",
+      "databaseName": "%COSMOS_DATABASE%",
+      "containerName": "%ORDERS_CONTAINER%",
+      "leaseContainerName": "outbox-leases",
+      "createLeaseContainerIfNotExists": true,
+      "leaseContainerPrefix": "outbox-",
+      "maxItemsPerInvocation": 100,
+      "startFromBeginning": false
+    }
+  ]
+}

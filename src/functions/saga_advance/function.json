@@ -1,0 +1,15 @@
+{
+  "scriptFile": "__init__.py",
+  "bindings": [
+    {
+      "name": "msg",
+      "type": "serviceBusTrigger",
+      "direction": "in",
+      "connection": "SERVICEBUS_CONNECTION",
+      "queueName": "%SESSION_QUEUE%",
+      "isSessionsEnabled": true,
+      "autoComplete": false,
+      "maxAutoLockRenewalDuration": "00:05:00"
+    }
+  ]
+}

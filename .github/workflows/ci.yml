@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install
+        run: pip install pytest pytest-asyncio pydantic azure-cosmos
+      - name: Test
+        run: python -m pytest tests -q --maxfail=1
+
+  bicep:
+    name: Bicep build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Bicep
+        run: |
+          curl -sLo bicep https://github.com/Azure/bicep/releases/latest/download/bicep-linux-x64
+          chmod +x bicep && sudo mv bicep /usr/local/bin/
+      - run: bicep build infra/main.bicep --stdout > /dev/null && bicep lint infra/main.bicep
+
+  scripts:
+    name: Script syntax
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -m py_compile scripts/load-test.py scripts/replay-dlq.py
+      - run: shellcheck scripts/*.sh || true
+
+  function-bindings:
+    name: Function bindings are valid JSON
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate every function.json
+        run: |
+          python - <<'EOF'
+          import json, pathlib, sys
+          bad = []
+          for p in pathlib.Path('src/functions').rglob('function.json'):
+              try:
+                  cfg = json.loads(p.read_text())
+                  assert "bindings" in cfg and cfg["bindings"], "no bindings"
+              except Exception as exc:
+                  bad.append(f"{p}: {exc}")
+          for b in bad: print(b, file=sys.stderr)
+          sys.exit(1 if bad else 0)
+          EOF

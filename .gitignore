@@ -1,0 +1,34 @@
+# Local state / secrets
+local.settings.json
+*.env
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+
+# Azure Functions artefacts
+.azurefunctions/
+bin/
+obj/
+
+# Bicep build output
+infra/main.json
+
+# Deployment artefacts
+*.zip
+outputs.json
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Load-test output
+load-test-results.json
